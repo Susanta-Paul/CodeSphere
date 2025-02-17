@@ -1,6 +1,7 @@
 import {Editor} from "@monaco-editor/react"
 import { useState } from "react"
 import SidebarParticipants from "../Components/SidebarParticipants"
+import Sidebar from "../Components/Sidebar"
 
 
 
@@ -25,7 +26,7 @@ export default function Code(){
     return(
         <div>
             <div className="pt-10 h-screen w-screen bg-[#121212] flex justify-between overflow-hidden lg:pt-5">
-                <div className=" hidden bg-red-500 h-screen lg:w-1/4 lg:block"></div>
+                <Sidebar/>
                 <div className=" h-screen w-screen lg:w-[60%] p-4">
                     <div>
                         <h1 className="font-bold text-[#A6E22E] text-3xl lg:text-5xl">Code Sphere Code Editor</h1>

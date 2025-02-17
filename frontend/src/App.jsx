@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import Join from './pages/Join'
 import Create from './pages/Create'
 import Code from './pages/Code'
+import Reels from './Components/Reels'
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       {/* <Join/> */}
       {/* <Create/> */}
       <Code/>
+      {/* <Reels/> */}
     </>
   )
 }
