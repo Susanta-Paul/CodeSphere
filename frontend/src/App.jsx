@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
+import {Route, RouterProvider, createBrowserRouter, createRoutesFromElements} from "react-router-dom"
 
 
 import Login from './pages/Login'
@@ -11,7 +12,19 @@ import Reels from './Components/Reels'
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  const router=createBrowserRouter(
+    createRoutesFromElements(
+      <Fragment>
+        <Route path='/' element={<Home/>} />
+        <Route path='signup' element={<Signup/>} />
+        <Route path='login' element={<Login/>} />
+        <Route path='join' element={<Join/>} />
+        <Route path='create' element={<Create/>} />
+        <Route path='code' element={<Code/>} />
+      </Fragment>
+    )
+  )
+
 
   return (
     <>
@@ -20,8 +33,8 @@ function App() {
       {/* <Home/> */}
       {/* <Join/> */}
       {/* <Create/> */}
-      <Code/>
-      {/* <Reels/> */}
+      {/* <Code/> */}
+      <RouterProvider router={router}/>
     </>
   )
 }

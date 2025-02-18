@@ -13,6 +13,8 @@ export default function Reels(){
         "/videos/Video-744.mp4",
         "/videos/Video-788.mp4",
         "/videos/Video-873.mp4",
+        "/videos/newvdo.mp4",
+        "/videos/new2.mp4",
 
     ]
 
@@ -58,14 +60,40 @@ export default function Reels(){
         })
     },[active])
 
+    const reel=useRef(null)
+
+    useEffect(()=>{
+        function handleReelScroll(event){
+            if(event.key==="ArrowDown"){
+                reel.current.scrollIntoView({behavior: "smooth"})
+            }
+        }
+
+        window.addEventListener("keydown", handleReelScroll)
+
+        return ()=>{
+            window.removeEventListener("keydown", handleReelScroll)
+        }
+
+    },[])
+
+    function handlePlay(index){
+        if(videoRefs.current[index].paused){
+            videoRefs.current[index].play()
+        }else{
+            videoRefs.current[index].pause()
+        }
+    }
+
 
     return (
-        <div className="snap-y snap-mandatory scroll-smooth border-4 border-white h-full w-full flex flex-col overflow-y-scroll gap-7 ">
+        <div ref={reel} className=" cursor-pointer snap-y snap-mandatory scroll-smooth border-4 border-white h-full w-full flex flex-col overflow-y-scroll gap-7 ">
             {videos.map((video, index)=>(
                 <video key={index}
                 className="mt-5 snap-center"
-                src={video} controls loop 
+                src={video}  loop 
                 ref={el => videoRefs.current[index] = el}
+                onClick={()=>{handlePlay(index)}}
                 ></video>
             ))}
         </div>

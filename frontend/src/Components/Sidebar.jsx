@@ -20,7 +20,10 @@ export default function Sidebar(){
     return (
         <div className=" hidden h-screen lg:w-1/4 lg:block text-white">
             <h3 className="text-xl font-medium text-center ">Username is typing...</h3>
-            <button onClick={showMood} className="font-lg p-2 cursor-pointer bg-red-500 rounded-lg my-2"> Mood Fresh 😉</button>
+            <div className="flex justify-around">
+                <button onClick={showMood} className="font-lg p-2 cursor-pointer bg-sky-500 rounded-lg my-2"> Mood Fresh 😉</button>
+                <button className="font-lg p-2 cursor-pointer bg-red-500 rounded-lg my-2">Leave Call</button>
+            </div>
             <div ref={mood} className=" hidden border-4 border-white h-[83%] w-full ">
                 <Reels/>
             </div>
