@@ -6,6 +6,8 @@ export default function Reels(){
         "/videos/Video-332.mp4",
         "/videos/Video-888.mp4",
         "/videos/Video-19.mp4",
+        "/videos/AQMyAYWEPk3uV1eQrtIA71xXHNKxARrx53wDU__bbki2AearcYdFvevch4ku4dv-_4SUR_NWWiCSykmTD8Bdm-O4WvYQUIlPIoA8cvQ.mp4",
+        "/videos/AQMde5nWeYAoFfIjuOeQlQO3tO869MEsr0MvLmsMPY-yAk0N9oEbHSg1DFa1L8WzWJwL3sDso6rbJhAVWnOQiH6Bqe0UXCnHggJ2m_0.mp4",
         "/videos/Video-171.mp4",
         "/videos/Video-255.mp4",
         "/videos/Video-523.mp4",
