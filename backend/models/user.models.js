@@ -40,7 +40,7 @@ userSchema.methods.comparePassword= async (password)=>{
     return await bcrypt.compare(password, this.password)
 }
 userSchema.methods.generateAuthToken= ()=>{
-    const token= jwt.sign({username: this.username}, process.env.SECRET_KEY)
+    const token= jwt.sign({username: this.username}, process.env.SECRET_KEY, { expiresIn: '24h' })
     return token
 }
 
