@@ -26,6 +26,13 @@ const userSchema=new mongoose.Schema({
         required: true,
         select: false
     },
+    refreshToken: {
+        type: String,
+        required: false,
+        unique: true,
+        select: false,
+        sparse: true
+    },
     socketId: {
         type: String,
         unique: true,
@@ -33,18 +40,22 @@ const userSchema=new mongoose.Schema({
         sparse: true
     }
 })
+userSchema.methods.comparePassword= async function(password){
+    return await bcrypt.compare(password, this.password)
+}
+userSchema.methods.generateAccessToken= function(){
+    const accessToken= jwt.sign({username: this.username}, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: '24h' })
+    return accessToken
+}
+userSchema.methods.generateRefreshToken=function(){
+    const refresh= jwt.sign({username: this.username}, process.env.REFRESH_TOKEN_SECRET_KEY)
+    return refresh
+}
 userSchema.statics.hashPassword=async (password)=>{
     return await bcrypt.hash(password, 10)
 }
-userSchema.methods.comparePassword= async (password)=>{
-    return await bcrypt.compare(password, this.password)
-}
-userSchema.methods.generateAuthToken= ()=>{
-    const token= jwt.sign({username: this.username}, process.env.SECRET_KEY, { expiresIn: '24h' })
-    return token
-}
 
 
-const user=mongoose.model("Users", userSchema)
+const userModel=mongoose.model("Users", userSchema)
 
-mongoose.exports=user
+module.exports=userModel
