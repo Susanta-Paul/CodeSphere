@@ -9,6 +9,8 @@ const userRoutes=require("./routes/user.routes")
 const connectToDb=require("./db/db")
 connectToDb()
 const cookieParser=require("cookie-parser")
+const initializeSocket=require("./config/socket")
+initializeSocket(server)
 
 app.use(cookieParser())
 app.use(express.json())
