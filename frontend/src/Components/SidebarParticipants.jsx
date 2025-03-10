@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import socket from "./Socket"
 
 export default function SidebarParticipants(){
 
@@ -15,9 +16,17 @@ export default function SidebarParticipants(){
     const [allChats, setAllchats]=useState([
         {type: "you", message:"hi"},
         {type:"other", message: "Hello", username:"pikachu"},
+        {type:"server", message: "Joined the Room", username:"ash"},
         {type:"other", message: "Hii", username:"ash"},
         {type:"you", message: "Chin tapak dum dum",},
     ])
+
+    useEffect(()=>{
+
+        socket.on("recieveMessage", (data)=>{
+            setAllchats(prechat=> [...prechat, data])
+        })
+    },[])
 
 
     return(
@@ -40,10 +49,16 @@ export default function SidebarParticipants(){
                         chat.type==="you"?(
                             <div key={index} className="mx-2 my-2 text-right pl-20">{chat.message}</div>
                         ):(
+                            chat.type=="other"?(
                             <div key={index} className="pr-20">
                                 <h3 className="mx-2 my-2 font-medium inline text-xl text-[#FF9800]">{chat.username}: </h3>
                                 {chat.message}
-                                </div>
+                                </div>):(
+                                    <div key={index} className="w-full flex justify-center items-center gap-2">
+                                    <h3 className=" my-2 font-medium inline text-center text-lg text-[#FF9800]">{chat.username} </h3>
+                                    <h3 className="my-2 font-medium inline text-center text-lg text-[#05f746]">{chat.message}</h3>
+                                    </div>
+                                )
                         )
                     ))}
                 </div>

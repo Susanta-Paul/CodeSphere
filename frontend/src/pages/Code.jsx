@@ -1,18 +1,28 @@
 import {Editor} from "@monaco-editor/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import SidebarParticipants from "../Components/SidebarParticipants"
 import Sidebar from "../Components/Sidebar"
+import { useParams } from "react-router-dom"
+import socket from "../Components/Socket"
 
 
 
 export default function Code(){
 
+    
+    const {roomName}= useParams()
     const [language, setLanguage]=useState("python")
     const [code, setCode]=useState("")
+    
+    useEffect(()=>{
+        if(!socket.connected){
+            socket.connect()
+        }
 
+        socket.emit("joinRoom", {roomName: roomName})
 
-
-
+    },[])
+    
     function handleCode(value){
         setCode(value)
     }

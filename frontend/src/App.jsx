@@ -20,7 +20,7 @@ function App() {
         <Route path='login' element={<Login/>} />
         <Route path='join' element={<Join/>} />
         <Route path='create' element={<Create/>} />
-        <Route path='code' element={<Code/>} />
+        <Route path='code/:roomName' element={<Code/>} />
       </Fragment>
     )
   )
