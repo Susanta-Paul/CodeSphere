@@ -32,14 +32,20 @@ function initializeSocket(server){
         })
 
         // Create or join Room 
-        socket.on("joinRoom", (data)=>{
+        socket.on("joinRoom", async (data)=>{
             socket.join(data.roomName)
-            io.to(data.roomName).emit("recieveMessage", {type:"server", message: "Joined the Room", username: user.username})
+            await io.to(data.roomName).emit("recieveMessage", {type:"server", message: "Joined the Room", username: user.username})
+            // console.log("message send once")
         })
 
         // handle Sending Messages
-        socket.on("message", (data)=>{
-            socket.to(data.roomName).emit("recieveMessage", {type:"other", message: data.message, username: user.username})
+        socket.on("message", async (data)=>{
+            await socket.broadcast.to(data.roomName).emit("recieveMessage", {type:"other", message: data.message, username: user.username})
+        })
+
+        // handle Code sharing
+        socket.on("shareCode", async (data)=>{
+            await socket.broadcast.to(data.roomName).emit("recieveCode", {code: data.code})
         })
 
     })
