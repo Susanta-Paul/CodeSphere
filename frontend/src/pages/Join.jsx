@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom"
+import {NavLink, useNavigate } from "react-router-dom"
+import socket from "../Components/Socket"
 
 export default function Join(){
 
@@ -6,6 +7,7 @@ export default function Join(){
     const navigate=useNavigate()
     
         function handleForm(e){
+            e.preventDefault()
             navigate(`/code/${e.target.roomname.value}`)
         }
 
@@ -26,6 +28,7 @@ export default function Join(){
                             className="cursor-pointer font-bold text-xl bg-[#FF9800] text-black w-[90%] p-2 lg:w-[40%] "
                          />
                     </form>
+                    <NavLink to="/"><button className="p-3 rounded-lg bg-red-500 cursor-pointer">HOME</button></NavLink>
                 </div>
             </div>
         </div>

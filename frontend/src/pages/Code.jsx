@@ -21,11 +21,21 @@ export default function Code(){
 
         socket.emit("joinRoom", {roomName: roomName})
 
+        socket.on("recieveCode", (data)=>{
+            setCode(data.code)
+        })
+
+        return () => {
+            // socket.emit("leaveRoom", { roomName: roomName }); // Inform server the user has left
+            socket.off(); // Remove all listeners for this socket
+        };
+
     },[])
     
-    function handleCode(value){
-        setCode(value)
-    }
+    
+    useEffect(()=>{
+        socket.emit("shareCode", {roomName: roomName, code: code})
+    }, [code])
 
     function handleRun(){
         console.log(code)
@@ -61,7 +71,7 @@ export default function Code(){
                             language={language}
                             value={code}
                             theme="vs-dark"
-                            onChange={handleCode}
+                            onChange={(e)=>{setCode(e)}}
                             options={{
                                 minimap: {enabled: false},
                                 fontSize: 18
@@ -70,7 +80,7 @@ export default function Code(){
                     </div>
                     <div className="bg-white w-full h-[20%] mt-5 overflow-scroll lg:h-[21%]"></div>
                 </div>
-                <SidebarParticipants/>
+                <SidebarParticipants roomName={roomName} />
             </div>
         </div>
     )

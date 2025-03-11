@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import socket from "./Socket"
 
-export default function SidebarParticipants(){
+export default function SidebarParticipants(props){
 
     const [allparticipant, setAllparticipants]=useState([
         {username: "user"},{username: "user"},{username: "user"},{username: "user"},
@@ -12,6 +12,8 @@ export default function SidebarParticipants(){
         {username: "user"},{username: "user"},{username: "user"},{username: "user"},
         {username: "user"},{username: "user"},{username: "user"},{username: "user"},
     ])
+
+    const [message, setMessage]=useState("")
 
     const [allChats, setAllchats]=useState([
         {type: "you", message:"hi"},
@@ -26,7 +28,20 @@ export default function SidebarParticipants(){
         socket.on("recieveMessage", (data)=>{
             setAllchats(prechat=> [...prechat, data])
         })
+
+        return () => {
+            socket.off("recieveMessage");
+        };
     },[])
+
+    function handleSendMessage(e){
+        e.preventDefault()
+        const msg=message
+        setAllchats(prev=>[...prev, {type:"you", message: msg,}])
+        setMessage("")
+
+        socket.emit("message", {message: msg , roomName: props.roomName})
+    }
 
 
     return(
@@ -62,9 +77,11 @@ export default function SidebarParticipants(){
                         )
                     ))}
                 </div>
-                <form className="flex justify-between items-center" >
+                <form onSubmit={(e)=>{handleSendMessage(e)}} className="flex justify-between items-center" >
                     <textarea
-                    className="border-2 borer-white h-10 w-55 resize-none"
+                    className="border-2 borer-white h-10 w-55 resize-none" name="msg"
+                    onChange={(e) => setMessage(e.target.value)}
+                    value={message}
                      placeholder="Type Message Here..."></textarea>
                     <input type="submit" value="Send"
                     className="bg-sky-500 rounded-md p-2 cursor-pointer" />

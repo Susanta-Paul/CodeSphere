@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import {NavLink,  useNavigate } from "react-router-dom"
 
 export default function Create(){
 
@@ -8,6 +8,7 @@ export default function Create(){
     const navigate=useNavigate()
 
     function handleForm(e){
+        e.preventDefault()
         navigate(`/code/${e.target.roomname.value}`)
     }
 
@@ -29,6 +30,7 @@ export default function Create(){
                             className="cursor-pointer font-bold text-xl bg-[#FF9800] text-black w-[90%] p-2 lg:w-[40%] "
                          />
                     </form>
+                    <NavLink to="/"><button className="p-3 rounded-lg bg-red-500 cursor-pointer">HOME</button></NavLink>
                 </div>
             </div>
         </div>

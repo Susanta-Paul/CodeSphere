@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import {NavLink, useNavigate } from "react-router-dom"
 import socket from "../Components/Socket"
 
 export default function Home(){
@@ -75,8 +75,8 @@ export default function Home(){
                     <div onClick={handleLogout} ><button className="text-white bg-red-500 p-2 text-xl font-bold rounded-lg cursor-pointer">Logout</button></div>
                 </div>
                 <div className="flex justify-center flex-col gap-7 pr-7">
-                    <button className="bg-sky-500 ml-10 cursor-pointer border-2 border-white font-bold p-2 ">Join Room</button>
-                    <button className="bg-sky-500 ml-10 cursor-pointer border-2 border-white font-bold p-2 ">Create Room</button>
+                    <NavLink to="/join"><button className="bg-sky-500 ml-10 cursor-pointer border-2 border-white font-bold p-2 ">Join Room</button></NavLink>
+                    <NavLink to="/create"><button className="bg-sky-500 ml-10 cursor-pointer border-2 border-white font-bold p-2 ">Create Room</button></NavLink>
                 </div>
             </div>
         </div>
