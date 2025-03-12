@@ -1,15 +1,29 @@
 import {NavLink, useNavigate } from "react-router-dom"
+import { useEffect } from "react"
 import socket from "../Components/Socket"
 
 export default function Join(){
 
 
     const navigate=useNavigate()
-    
-        function handleForm(e){
-            e.preventDefault()
-            navigate(`/code/${e.target.roomname.value}`)
+
+    useEffect(()=>{
+
+        if(!socket.connected){
+            socket.connect()
         }
+
+
+        return ()=>{
+            socket.off()
+        }
+
+    }, [])
+    
+    function handleForm(e){
+        e.preventDefault()
+        navigate(`/code/${e.target.roomname.value}`)
+    }
 
 
     return (

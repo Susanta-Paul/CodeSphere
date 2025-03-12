@@ -1,11 +1,25 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {NavLink,  useNavigate } from "react-router-dom"
+import socket from "../Components/Socket"
 
 export default function Create(){
 
 
     // const [roomName, setRoomName]=useState()
     const navigate=useNavigate()
+
+    useEffect(()=>{
+    
+            if(!socket.connected){
+                socket.connect()
+            }
+    
+    
+            return ()=>{
+                socket.off()
+            }
+    
+        }, [])
 
     function handleForm(e){
         e.preventDefault()

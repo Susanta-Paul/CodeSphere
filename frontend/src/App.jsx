@@ -9,6 +9,7 @@ import Join from './pages/Join'
 import Create from './pages/Create'
 import Code from './pages/Code'
 import Reels from './Components/Reels'
+// import Execute from './pages/Execute'
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path='login' element={<Login/>} />
         <Route path='join' element={<Join/>} />
         <Route path='create' element={<Create/>} />
+        {/* <Route path='execute' element={<Check/>} /> */}
         <Route path='code/:roomName' element={<Code/>} />
       </Fragment>
     )

@@ -10,6 +10,20 @@ export default function Home(){
     })
     const navigate=useNavigate()
 
+
+    useEffect(()=>{
+
+        if(!socket.connected){
+            socket.connect()
+        }
+
+
+        return ()=>{
+            socket.off()
+        }
+
+    }, [])
+
     useEffect(()=>{
 
         async function fetchData(){

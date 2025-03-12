@@ -13,6 +13,9 @@ export default function Code(){
     const {roomName}= useParams()
     const [language, setLanguage]=useState("python")
     const [code, setCode]=useState("")
+    const langId={"python": 71, "javascript": 63, "java": 91, "c++": 54}
+    const [result, setResult]=useState("")
+    const [inputs, setInputs]=useState("")
     
     useEffect(()=>{
         if(!socket.connected){
@@ -31,14 +34,67 @@ export default function Code(){
         };
 
     },[])
+
+    
+    async function uploadCode(){
+        const url = 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=false&fields=*';
+        const options = {
+            method: 'POST',
+            headers: {
+                'x-rapidapi-key': `${import.meta.env.VITE_RAPID_API_KEY}`,
+                'x-rapidapi-host': `${import.meta.env.VITE_API_HOST}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                language_id: langId[language],
+                source_code: btoa(code),
+                stdin: btoa(inputs.split(",").join("\n"))
+               
+            })
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            // console.log(result);
+            return result.token
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    async function getCode(token) {
+        const url = `https://judge0-ce.p.rapidapi.com/submissions/${token}?base64_encoded=true&fields=*`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': `${import.meta.env.VITE_RAPID_API_KEY}`,
+                'x-rapidapi-host': `${import.meta.env.VITE_API_HOST}`
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            // console.log(result);
+            if(result.stderr){
+                setResult(atob(result.stderr))
+            }else{setResult(atob(result.stdout))}
+            
+        } catch (error) {
+            console.error(error);
+        }
+    }
     
     
     useEffect(()=>{
-        socket.emit("shareCode", {roomName: roomName, code: code})
+        socket.emit("shareCode", {roomName: roomName, code: code}) 
     }, [code])
 
-    function handleRun(){
-        console.log(code)
+    async function handleRun(){
+        const token= await uploadCode()
+        await getCode(token)
     }
 
 
@@ -78,7 +134,13 @@ export default function Code(){
                             }}
                         />
                     </div>
-                    <div className="bg-white w-full h-[20%] mt-5 overflow-scroll lg:h-[21%]"></div>
+                    <div className="p-4 bg-white w-full h-[20%] mt-5 overflow-scroll lg:h-[21%]">
+                        Enter all inputs here as CSV format: <input 
+                        className="border-2 border-red-500 w-[60%]"
+                        onChange={(e)=>{setInputs(e.target.value)}}
+                        type="text"/>
+                        <br /><br />{result} 
+                        </div>
                 </div>
                 <SidebarParticipants roomName={roomName} />
             </div>
