@@ -8,7 +8,10 @@ export const createSocketConnection = () => {
     const refreshToken = localStorage.getItem("refreshToken");
     if (refreshToken) {
         socket.connect(); // Connect the socket manually
-        socket.emit("setSocketId", { refreshToken: refreshToken });
+        
+        socket.on("connect", () => {
+            socket.emit("setSocketId", { refreshToken: refreshToken });
+        });
     }
 };
 

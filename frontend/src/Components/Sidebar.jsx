@@ -22,6 +22,10 @@ export default function Sidebar(props){
     useEffect(()=>{
         if(!socket.connected){
             socket.connect()
+
+            socket.on("connect", () => {
+                socket.emit("setSocketId", { refreshToken: refreshToken });
+            });
         }
 
         return ()=>{

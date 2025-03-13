@@ -20,7 +20,10 @@ export default function Code(){
     useEffect(()=>{
         if(!socket.connected){
             socket.connect()
-            socket.emit("setSocketId", { refreshToken: localStorage.getItem("refreshToken") })
+            
+            socket.on("connect", () => {
+                socket.emit("setSocketId", { refreshToken: refreshToken });
+            });
         }
 
         socket.emit("joinRoom", {roomName: roomName})
