@@ -21,7 +21,7 @@ export default function Reels(){
     ]
 
     const videoRefs=useRef([])
-    const [active, setActive]=useState(0)
+    const [active, setActive]=useState()
 
 
     useEffect(()=>{

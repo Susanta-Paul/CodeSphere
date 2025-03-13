@@ -11,6 +11,7 @@ export default function Join(){
 
         if(!socket.connected){
             socket.connect()
+            socket.emit("setSocketId", { refreshToken: localStorage.getItem("refreshToken") })
         }
 
 

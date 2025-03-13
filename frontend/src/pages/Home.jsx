@@ -15,6 +15,7 @@ export default function Home(){
 
         if(!socket.connected){
             socket.connect()
+            socket.emit("setSocketId", { refreshToken: localStorage.getItem("refreshToken") })
         }
 
 

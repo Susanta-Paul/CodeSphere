@@ -20,6 +20,7 @@ export default function Code(){
     useEffect(()=>{
         if(!socket.connected){
             socket.connect()
+            socket.emit("setSocketId", { refreshToken: localStorage.getItem("refreshToken") })
         }
 
         socket.emit("joinRoom", {roomName: roomName})
@@ -28,8 +29,12 @@ export default function Code(){
             setCode(data.code)
         })
 
+        socket.on("getOutput", (data)=>{
+            setResult(data.output)
+        })
+
         return () => {
-            // socket.emit("leaveRoom", { roomName: roomName }); // Inform server the user has left
+            socket.emit("leaveRoom", {roomName: roomName})
             socket.off(); // Remove all listeners for this socket
         };
 
@@ -80,7 +85,12 @@ export default function Code(){
             // console.log(result);
             if(result.stderr){
                 setResult(atob(result.stderr))
-            }else{setResult(atob(result.stdout))}
+                socket.emit("outputCode", {roomName: roomName, output: atob(result.stderr)})
+
+            }else{
+                setResult(atob(result.stdout))
+                socket.emit("outputCode", {roomName: roomName, output: atob(result.stdout)})
+            }
             
         } catch (error) {
             console.error(error);
@@ -102,7 +112,7 @@ export default function Code(){
     return(
         <div>
             <div className="pt-10 h-screen w-screen bg-[#121212] flex justify-between overflow-hidden lg:pt-5">
-                <Sidebar/>
+                <Sidebar roomName={roomName} />
                 <div className=" h-screen w-screen lg:w-[60%] p-4">
                     <div>
                         <h1 className="font-bold text-[#A6E22E] text-3xl lg:text-5xl">Code Sphere Code Editor</h1>
