@@ -27,14 +27,15 @@ function initializeSocket(server){
         let user;
 
         socket.on("setSocketId", async (data)=>{
-            // console.log(data)
+            // console.log("data got for updating the user :)")
             user= await updateUserSocket(data.refreshToken, socket.id)
+            // console.log("user Updated", user.username)  // remove this after development
         })
 
         // Create or join Room 
         socket.on("joinRoom", async (data)=>{
             socket.join(data.roomName)
-            await io.to(data.roomName).emit("recieveMessage", {type:"server", message: "Joined the Room", username: user.username})
+            await io.to(data.roomName).emit("recieveMessage", {type:"server", message: "Joined the Room", username: user?.username})
             // console.log("message send once")
         })
 
@@ -46,6 +47,18 @@ function initializeSocket(server){
         // handle Code sharing
         socket.on("shareCode", async (data)=>{
             await socket.broadcast.to(data.roomName).emit("recieveCode", {code: data.code})
+        })
+
+        // handle leave Room
+        socket.on("leaveRoom", (data)=>{
+            socket.leave(data.roomName)  // check the leave function 
+            io.to(data.roomName).emit("recieveMessage", {type:"server", message: "has left the Room", username: user?.username})
+            // console.log(user.username, "has left the room") // remember to delete
+        })
+
+        // handle output Code
+        socket.on("outputCode", async (data)=>{
+            await socket.broadcast.to(data.roomName).emit("getOutput", {output: data.output})
         })
 
     })
