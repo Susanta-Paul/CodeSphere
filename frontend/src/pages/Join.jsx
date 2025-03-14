@@ -9,6 +9,8 @@ export default function Join(){
 
     useEffect(()=>{
 
+        const refreshToken = localStorage.getItem("refreshToken");
+
         if(!socket.connected){
             socket.connect()
             

@@ -9,21 +9,23 @@ export default function Create(){
     const navigate=useNavigate()
 
     useEffect(()=>{
+
+        const refreshToken = localStorage.getItem("refreshToken");
     
-            if(!socket.connected){
-                socket.connect()
-                
-                socket.on("connect", () => {
-                    socket.emit("setSocketId", { refreshToken: refreshToken });
-                });
-            }
+        if(!socket.connected){
+            socket.connect()
+            
+            socket.on("connect", () => {
+                socket.emit("setSocketId", { refreshToken: refreshToken });
+            });
+        }
     
     
-            return ()=>{
-                socket.off()
-            }
+        return ()=>{
+            socket.off()
+        }
     
-        }, [])
+    }, [])
 
     function handleForm(e){
         e.preventDefault()

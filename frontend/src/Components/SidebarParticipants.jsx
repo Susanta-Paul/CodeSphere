@@ -4,13 +4,13 @@ import socket from "./Socket"
 export default function SidebarParticipants(props){
 
     const [allparticipant, setAllparticipants]=useState([
-        {username: "user"},{username: "user"},{username: "user"},{username: "user"},
-        {username: "user"},{username: "user"},{username: "user"},{username: "user"},
-        {username: "user"},{username: "user"},{username: "user"},{username: "user"},
-        {username: "user"},{username: "user"},{username: "user"},{username: "user"},
-        {username: "user"},{username: "user"},{username: "user"},{username: "user"},
-        {username: "user"},{username: "user"},{username: "user"},{username: "user"},
-        {username: "user"},{username: "user"},{username: "user"},{username: "user"},
+        // {username: "user"},{username: "user"},{username: "user"},{username: "user"},
+        // {username: "user"},{username: "user"},{username: "user"},{username: "user"},
+        // {username: "user"},{username: "user"},{username: "user"},{username: "user"},
+        // {username: "user"},{username: "user"},{username: "user"},{username: "user"},
+        // {username: "user"},{username: "user"},{username: "user"},{username: "user"},
+        // {username: "user"},{username: "user"},{username: "user"},{username: "user"},
+        // {username: "user"},{username: "user"},{username: "user"},{username: "user"},
     ])
 
     const [message, setMessage]=useState("")
@@ -27,6 +27,15 @@ export default function SidebarParticipants(props){
 
         socket.on("recieveMessage", (data)=>{
             setAllchats(prechat=> [...prechat, data])
+        })
+
+        socket.on("addUser", (data)=>{
+            setAllparticipants(prev=>[...prev, data])
+        })
+
+        socket.on("removeUser", (data)=>{
+            const newList=allparticipant.filter(user=> user.username!==data.username)
+            setAllparticipants(newList)
         })
 
         return () => {
@@ -46,8 +55,8 @@ export default function SidebarParticipants(props){
 
     return(
         <div className="pt-7 border-3 border-white text-white h-screen lg:w-1/5 ">
-            <h1 className="text-3xl text-center font-medium" >All Participants</h1>
-            <div className="w-full h-[20%] mt-2 overflow-y-scroll">
+            {/*<h1 className="text-3xl text-center font-medium" >All Participants</h1>
+             <div className="w-full h-[20%] mt-2 overflow-y-scroll">
                 {allparticipant.map((user, index)=>(
                     <div key={index} className="flex items-center text-xl">
                         <img  
@@ -56,10 +65,10 @@ export default function SidebarParticipants(props){
                         <div>{user.username}</div>
                     </div>
                 ))}
-            </div><hr />
-            <div className="h-[70%] flex flex-col justify-between ">
-            <h1 className="text-3xl text-center font-medium my-5" >Chats</h1>
-                <div className="w-full text-white border-2 border-white h-[75%] overflow-y-scroll p-2 " id="messages">
+            </div><hr /> */}
+            <div className="h-[97%] flex flex-col justify-between ">
+                <h1 className="text-3xl text-center font-medium mb-5" >Chats</h1>
+                <div className="w-full text-white border-2 border-white h-[100%] overflow-y-scroll p-2 " id="messages">
                     {allChats.map((chat, index)=>(
                         chat.type==="you"?(
                             <div key={index} className="mx-2 my-2 text-right pl-20">{chat.message}</div>

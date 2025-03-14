@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react"
 import {NavLink, useNavigate } from "react-router-dom"
 import socket from "../Components/Socket"
+import RenewAccessToken from "../Components/RenewAccessToken"
 
 export default function Home(){
 
     const [user, setUser]=useState({
-        fullname: "fdsfsdfsdft", 
-        username: "fasdfsdffsdf"
+        fullname: "", 
+        username: ""
     })
     const navigate=useNavigate()
 
 
     useEffect(()=>{
+
+        const refreshToken = localStorage.getItem("refreshToken");
 
         if(!socket.connected){
             socket.connect()
@@ -41,11 +44,16 @@ export default function Home(){
             })
 
             const res= await response.json()
-        
-            setUser({
-                fullname: res.user.fullname,
-                username: res.user.username
-            })
+
+            if(response.status==200){
+                setUser({
+                    fullname: res.user.fullname,
+                    username: res.user.username
+                })
+            }else if(response.status==401){
+                RenewAccessToken()
+            }
+            
         }
 
         fetchData()
@@ -72,6 +80,8 @@ export default function Home(){
                 localStorage.removeItem("accessToken")
                 localStorage.removeItem("refreshToken")
                 navigate("/login")
+            }else if(response.status==401){
+                RenewAccessToken()
             }
         }catch(err){}
     }
@@ -83,7 +93,7 @@ export default function Home(){
                 <div className="flex justify-around items-center">
                     <div className="flex gap-7 items-center p-7">
                         <div className="h-30 w-30 rounded-full overflow-hidden">
-                        <img src="https://sabimages.com/wp-content/uploads/2024/07/cute-girl-pic-photo4.jpg" alt="Profile picture"
+                        <img src="https://photosbook.in/wp-content/uploads/cute-girl-pic11.jpg"
                             className="w-[100%] "
                         /></div>
                         <div className="flex flex-col" >

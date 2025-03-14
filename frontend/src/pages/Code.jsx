@@ -16,8 +16,11 @@ export default function Code(){
     const langId={"python": 71, "javascript": 63, "java": 91, "c++": 54}
     const [result, setResult]=useState("")
     const [inputs, setInputs]=useState("")
+    const [loading, setLoading]=useState(false)
     
     useEffect(()=>{
+
+        const refreshToken = localStorage.getItem("refreshToken");
         if(!socket.connected){
             socket.connect()
             
@@ -106,8 +109,11 @@ export default function Code(){
     }, [code])
 
     async function handleRun(){
+        setLoading(true)
+        setResult("")
         const token= await uploadCode()
         await getCode(token)
+        setLoading(false)
     }
 
 
@@ -152,7 +158,9 @@ export default function Code(){
                         className="border-2 border-red-500 w-[60%]"
                         onChange={(e)=>{setInputs(e.target.value)}}
                         type="text"/>
-                        <br /><br />{result} 
+                        <br /><br />
+                        <div className="text-xl font-medium">{loading&&("Loading...")}</div>
+                        <div className="text-xl font-medium">{result} </div>
                         </div>
                 </div>
                 <SidebarParticipants roomName={roomName} />

@@ -10,19 +10,20 @@ import Create from './pages/Create'
 import Code from './pages/Code'
 import Reels from './Components/Reels'
 // import Execute from './pages/Execute'
+import UserProtected from './pages/userProteceted'
 
 
 function App() {
   const router=createBrowserRouter(
     createRoutesFromElements(
       <Fragment>
-        <Route path='/' element={<Home/>} />
+        <Route path='/' element={<UserProtected><Home/></UserProtected>} />
         <Route path='signup' element={<Signup/>} />
         <Route path='login' element={<Login/>} />
-        <Route path='join' element={<Join/>} />
-        <Route path='create' element={<Create/>} />
+        <Route path='join' element={<UserProtected><Join/></UserProtected>} />
+        <Route path='create' element={<UserProtected><Create/></UserProtected>} />
         {/* <Route path='execute' element={<Check/>} /> */}
-        <Route path='code/:roomName' element={<Code/>} />
+        <Route path='code/:roomName' element={<UserProtected><Code/></UserProtected>} />
       </Fragment>
     )
   )
