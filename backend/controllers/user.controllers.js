@@ -140,7 +140,9 @@ module.exports.renewAccessTokenController= async(req, res, next)=>{
     try{
         const decoded=jwt.verify(incommingToken, process.env.REFRESH_TOKEN_SECRET_KEY)
 
-        const user= await userModel.findOne({username: decoded?.username})
+        const user= await userModel.findOne({username: decoded?.username}).select("+refreshToken")
+
+        // console.log(user)
 
         if(!user){
             return res.status(401).json({message: "invalid refresh Token"})

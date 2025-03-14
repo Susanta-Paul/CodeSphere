@@ -6,7 +6,7 @@ const userModel=require("../models/user.models")
 async function updateUserSocket(refreshToken, socketId) {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET_KEY)
     const newUser= await userModel.findOneAndUpdate({username: decoded?.username}, {
-        $set: [{socketId: socketId}]
+        $set: {socketId: socketId}
     })
     return newUser
 }
@@ -33,11 +33,15 @@ function initializeSocket(server){
         })
 
         // Create or join Room 
-        socket.on("joinRoom", async (data)=>{
-            socket.join(data.roomName)
-            await io.to(data.roomName).emit("recieveMessage", {type:"server", message: "Joined the Room", username: user?.username})
-            // console.log("message send once")
-        })
+        socket.on("joinRoom", async (data) => {
+            if (!data.roomName) {
+                console.error("Room name is missing");
+                return;
+            }
+            socket.join(data.roomName);
+            await io.to(data.roomName).emit("recieveMessage", { type: "server", message: "Joined the Room", username: user?.username });
+        });
+        
 
         // handle Sending Messages
         socket.on("message", async (data)=>{
@@ -51,15 +55,22 @@ function initializeSocket(server){
 
         // handle leave Room
         socket.on("leaveRoom", (data)=>{
+            if (!data.roomName) {
+                console.error("Room name is missing");
+                return;
+            }
             socket.leave(data.roomName)  // check the leave function 
             io.to(data.roomName).emit("recieveMessage", {type:"server", message: "has left the Room", username: user?.username})
-            // console.log(user.username, "has left the room") // remember to delete
+            // io.to(data.roomName).emit("removeUser", {username: user?.username})
         })
 
         // handle output Code
         socket.on("outputCode", async (data)=>{
             await socket.broadcast.to(data.roomName).emit("getOutput", {output: data.output})
         })
+
+        socket.on("disconnect", (reason) => {
+            console.log(`Client Disconnected: ${socket.id}, Reason: ${reason}`)})
 
     })
 }
